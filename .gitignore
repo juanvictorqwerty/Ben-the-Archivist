@@ -1,0 +1,30 @@
+# Logs
+Exam-Archive/logs
+Exam-Archive/*.log
+Exam-Archive/npm-debug.log*
+Exam-Archive/yarn-debug.log*
+Exam-Archive/yarn-error.log*
+Exam-Archive/pnpm-debug.log*
+Exam-Archive/lerna-debug.log*
+
+Exam-Archive/node_modules
+Exam-Archive/dist
+Exam-Archive/dist-ssr
+Exam-Archive/*.local
+
+# Editor directories and files
+Exam-Archive/.vscode/*
+Exam-Archive/!.vscode/extensions.json
+Exam-Archive/.idea
+Exam-Archive/.DS_Store
+Exam-Archive/*.suo
+Exam-Archive/*.ntvs*
+Exam-Archive/*.njsproj
+Exam-Archive/*.sln
+Exam-Archive/*.sw?
+
+backend/_Project/__pycache__/
+backend/ActionsOnFiles/__pycache__/
+backend/ActionsOnFiles/migrations/__pycache__/
+backend/RegisterPublishers/__pycache__/
+backend/RegisterPublishers/migrations/__pycache__/
