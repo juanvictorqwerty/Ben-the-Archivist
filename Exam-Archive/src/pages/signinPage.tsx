@@ -1,11 +1,15 @@
 import { Container,Paper,TextField,Button,Grid,Link, Typography, Box } from "@mui/material"
 import { useState } from 'react';
 import IconButton from '@mui/material/IconButton';
+import { Link as RouterLink,useNavigate } from 'react-router-dom';
 import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
+
+
 function SignInPage(){
+    const navigate = useNavigate();
     const [email, setEmail]=useState('');
     const [password,setPassword]=useState('');
     const [confirmPassword,setConfirmPassword]=useState('')
@@ -47,18 +51,19 @@ function SignInPage(){
                 value={password}
                 onChange={(e)=>setPassword(e.target.value)}
                 type={showPassword ? 'text' : 'password'}
-                InputProps={{
+                slotProps={{
+                    input:{
                     endAdornment: (
                         <InputAdornment position="end">
                             <IconButton
-                            onClick={() => setShowPassword(!showPassword)}
+                                onClick={() => setShowPassword(!showPassword)}
+                                edge="end"
                             >
                                 {showPassword ? <Visibility style={{ color: 'black' }} /> : <VisibilityOff style={{ color: 'black' }} />}
                             </IconButton>
                         </InputAdornment>
-                    ),
-                    }}
-                    
+                    )
+                }}}
             />
             <TextField
                 margin="normal"
@@ -74,14 +79,14 @@ function SignInPage(){
                     endAdornment: (
                         <InputAdornment position="end">
                             <IconButton
-                            onClick={() => setShowPassword(!showPassword)}
+                                onClick={() => setShowPassword(!showPassword)}
+                                edge="end"
                             >
                                 {showPassword ? <Visibility style={{ color: 'black' }} /> : <VisibilityOff style={{ color: 'black' }} />}
                             </IconButton>
                         </InputAdornment>
-                    ),
-                    }}
-                    
+                    )
+                }}
             />
             <Grid item xs={12} style={{ textAlign: 'center' }}>
                 <Button
@@ -92,18 +97,11 @@ function SignInPage(){
                     Enter
                 </Button>
             </Grid>
-            <Grid container>
+            <div>Have an account ?</div>
+            <Box>
+                <Link component={RouterLink} to='/login' variant="body2">{'Login'}</Link>
+            </Box>
 
-                    <Grid item xs={12}>
-                        <Link href='#' variant="body2">
-                        </Link>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Link href='#' variant="body2">
-                            {'Have an account ? Login'} ?
-                        </Link>
-                    </Grid>    
-            </Grid> 
         </Box>
         </Paper>
     </Container>

@@ -3,9 +3,11 @@ import { useState } from 'react';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
+import { Link as RouterLink,useNavigate } from 'react-router-dom';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 function LoginPage(){
+    const navigate = useNavigate();
     const [email, setEmail]=useState('');
     const [password,setPassword]=useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -27,6 +29,7 @@ function LoginPage(){
                 id="email"
                 autoComplete="email"
                 autoFocus
+                placeholder="Email"
                 value={email}
                 onChange={(e)=>setEmail(e.target.value)}
             />
@@ -37,20 +40,19 @@ function LoginPage(){
                 id="password"
                 autoComplete="password"
                 autoFocus
+                placeholder="Password"
                 value={password}
                 onChange={(e)=>setPassword(e.target.value)}
                 type={showPassword ? 'text' : 'password'}
-                InputProps={{
-                    endAdornment: (
+                slotProps={{
+                    input: {
+                    endAdornment:
                         <InputAdornment position="end">
-                            <IconButton
-                            onClick={() => setShowPassword(!showPassword)}
-                            >
+                            <IconButton onClick={() => setShowPassword(!showPassword)}>
                                 {showPassword ? <Visibility style={{ color: 'black' }} /> : <VisibilityOff style={{ color: 'black' }} />}
                             </IconButton>
-                        </InputAdornment>
-                    ),
-                    }}
+                        </InputAdornment>,
+                    }}}
                     
             />
             <Grid item xs={12} style={{ textAlign: 'center' }}>
@@ -62,19 +64,14 @@ function LoginPage(){
                     Enter
                 </Button>
             </Grid>
-            <Grid container>
-
-                    <Grid item xs={12}>
+            <Box>
                         <Link href='#' variant="body2">
                             Forgot your password ?
                         </Link>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Link href='#' variant="body2">
-                            {'No account ? Sign up'} ?
-                        </Link>
-                    </Grid>    
-            </Grid> 
+            </Box>
+            <Box>
+                <Link component={RouterLink} to='/signin' variant="body2">{'Sign up'}</Link>
+            </Box>
         </Box>
         </Paper>
     </Container>
