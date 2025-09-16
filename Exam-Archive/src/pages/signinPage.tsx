@@ -1,7 +1,113 @@
+import { Container,Paper,TextField,Button,Grid,Link, Typography, Box } from "@mui/material"
+import { useState } from 'react';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+
 function SignInPage(){
+    const [email, setEmail]=useState('');
+    const [password,setPassword]=useState('');
+    const [confirmPassword,setConfirmPassword]=useState('')
+    const [showPassword, setShowPassword] = useState(false);
+
+    const handleSubmit=(event: { preventDefault: () => void; })=>{
+        event.preventDefault();
+        if (confirmPassword==password){
+            console.log('Sign in attempt ',{email,password});
+        }
+        else{
+            alert("The passwords don't match");
+        }
+        
+    };
     return(
-    <div>this is the sign in page</div>
+    <Container maxWidth="xs" sx={{ mt: 8 }}>
+        <Paper elevation={10} sx={{ p: 4 }}>
+        <Typography component="h1" variant="h5">Sign in</Typography>
+        <Box component="form" onSubmit={handleSubmit} sx={{mt:1}}>
+            <TextField
+                margin="normal"
+                required
+                fullWidth
+                type="email"
+                id="email"
+                autoComplete="email"
+                autoFocus
+                value={email}
+                onChange={(e)=>setEmail(e.target.value)}
+            />
+            <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="password"
+                autoComplete="password"
+                autoFocus
+                value={password}
+                onChange={(e)=>setPassword(e.target.value)}
+                type={showPassword ? 'text' : 'password'}
+                InputProps={{
+                    endAdornment: (
+                        <InputAdornment position="end">
+                            <IconButton
+                            onClick={() => setShowPassword(!showPassword)}
+                            >
+                                {showPassword ? <Visibility style={{ color: 'black' }} /> : <VisibilityOff style={{ color: 'black' }} />}
+                            </IconButton>
+                        </InputAdornment>
+                    ),
+                    }}
+                    
+            />
+            <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="confirmPassword"
+                autoComplete="confirmPassword"
+                autoFocus
+                value={confirmPassword}
+                onChange={(e)=>setConfirmPassword(e.target.value)}
+                type={showPassword ? 'text' : 'password'}
+                InputProps={{
+                    endAdornment: (
+                        <InputAdornment position="end">
+                            <IconButton
+                            onClick={() => setShowPassword(!showPassword)}
+                            >
+                                {showPassword ? <Visibility style={{ color: 'black' }} /> : <VisibilityOff style={{ color: 'black' }} />}
+                            </IconButton>
+                        </InputAdornment>
+                    ),
+                    }}
+                    
+            />
+            <Grid item xs={12} style={{ textAlign: 'center' }}>
+                <Button
+                    type="submit"
+                    variant="contained"
+                    sx={{ mt: 3, m: 2 }} // Keep the margin for spacing
+                >
+                    Enter
+                </Button>
+            </Grid>
+            <Grid container>
+
+                    <Grid item xs={12}>
+                        <Link href='#' variant="body2">
+                        </Link>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Link href='#' variant="body2">
+                            {'Have an account ? Login'} ?
+                        </Link>
+                    </Grid>    
+            </Grid> 
+        </Box>
+        </Paper>
+    </Container>
     )
-}
+};
 
 export default SignInPage;
