@@ -6,8 +6,6 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
-
-
 function SignInPage(){
     const navigate = useNavigate();
     const [email, setEmail]=useState('');
@@ -75,7 +73,8 @@ function SignInPage(){
                 value={confirmPassword}
                 onChange={(e)=>setConfirmPassword(e.target.value)}
                 type={showPassword ? 'text' : 'password'}
-                InputProps={{
+                slotProps={{
+                    input:{
                     endAdornment: (
                         <InputAdornment position="end">
                             <IconButton
@@ -86,7 +85,7 @@ function SignInPage(){
                             </IconButton>
                         </InputAdornment>
                     )
-                }}
+                }}}
             />
             <Grid item xs={12} style={{ textAlign: 'center' }}>
                 <Button

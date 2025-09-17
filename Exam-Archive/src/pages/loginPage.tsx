@@ -65,9 +65,9 @@ function LoginPage(){
                 </Button>
             </Grid>
             <Box>
-                        <Link href='#' variant="body2">
-                            Forgot your password ?
-                        </Link>
+                    <Link href='#' variant="body2">
+                        Forgot your password ?
+                    </Link>
             </Box>
             <Box>
                 <Link component={RouterLink} to='/signin' variant="body2">{'Sign up'}</Link>
