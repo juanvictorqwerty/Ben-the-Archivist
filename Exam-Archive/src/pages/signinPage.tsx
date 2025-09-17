@@ -1,5 +1,6 @@
 import { Container,Paper,TextField,Button,Grid,Link, Typography, Box } from "@mui/material"
 import { useState } from 'react';
+import axios from 'axios';
 import IconButton from '@mui/material/IconButton';
 import { Link as RouterLink,useNavigate } from 'react-router-dom';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -17,10 +18,22 @@ function SignInPage(){
     const handleSubmit=(event: { preventDefault: () => void; })=>{
         event.preventDefault();
         if (confirmPassword==password){
-            console.log('Sign in attempt ',{email,password});
+            axios.post('http://127.0.0.1:8000/register/', {
+                username:username,
+                email: email,
+                password: password
+            })
+            .then(response => {
+                console.log('Registration successful', response.data);
+                navigate('/');
+            })
+            .catch(error => {
+                console.error('There was an error during registration:', error);
+                alert(`Registration failed: ${error.message}`);
+            });
         }
         else{
-            alert("The passwords don't match");
+            alert("The passwords do not match");
         }
         
     };
@@ -39,6 +52,7 @@ function SignInPage(){
                 autoFocus
                 value={email}
                 onChange={(e)=>setEmail(e.target.value)}
+                label="Email Address"
             />
             <TextField
                 margin="normal"
@@ -50,6 +64,7 @@ function SignInPage(){
                 autoFocus
                 value={username}
                 onChange={(e)=>setUsername(e.target.value)}
+                label="Username"
             />
             <TextField
                 margin="normal"
@@ -60,6 +75,7 @@ function SignInPage(){
                 autoFocus
                 value={password}
                 onChange={(e)=>setPassword(e.target.value)}
+                label="Password"
                 type={showPassword ? 'text' : 'password'}
                 slotProps={{
                     input:{
@@ -84,6 +100,7 @@ function SignInPage(){
                 autoFocus
                 value={confirmPassword}
                 onChange={(e)=>setConfirmPassword(e.target.value)}
+                label="Confirm Password"
                 type={showPassword ? 'text' : 'password'}
                 slotProps={{
                     input:{
