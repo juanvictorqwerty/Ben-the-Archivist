@@ -9,6 +9,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 function SignInPage(){
     const navigate = useNavigate();
     const [email, setEmail]=useState('');
+    const [username,setUsername]=useState('');
     const [password,setPassword]=useState('');
     const [confirmPassword,setConfirmPassword]=useState('')
     const [showPassword, setShowPassword] = useState(false);
@@ -38,6 +39,17 @@ function SignInPage(){
                 autoFocus
                 value={email}
                 onChange={(e)=>setEmail(e.target.value)}
+            />
+            <TextField
+                margin="normal"
+                required
+                fullWidth
+                type="username"
+                id="username"
+                autoComplete="username"
+                autoFocus
+                value={username}
+                onChange={(e)=>setUsername(e.target.value)}
             />
             <TextField
                 margin="normal"
