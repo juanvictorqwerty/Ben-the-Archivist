@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Header from "../components/HEADER";
 import DocumentCard from "../components/DocumentCard";
 import { Toolbar, Container, Typography, CircularProgress, Box } from '@mui/material';
@@ -32,26 +32,38 @@ function HomePage() {
         <>
             <Header />
             <Toolbar />
-            <Container maxWidth="md" sx={{ mt: 4 }}>
-                <Typography variant="h4" fontWeight="bold" mb={3}>All Documents</Typography>
+            <Container maxWidth="lg" sx={{ mt: 4 }}>
                 {loading ? (
                     <Box textAlign="center" mt={4}><CircularProgress /></Box>
                 ) : (
                     documents.length === 0 ? (
                         <Typography>No documents found.</Typography>
                     ) : (
-                        documents.map((doc: any) => (
-                            <DocumentCard
-                                key={doc.id}
-                                title={doc.title}
-                                teacher={doc.teacher}
-                                exam_semester={doc.exam_semester}
-                                exam_year={doc.exam_year}
-                                uploader={doc.username || 'Unknown'}
-                                file={doc.file}
-                                onDownload={() => handleDownload(doc.id)}
-                            />
-                        ))
+                        <Box
+                            sx={{
+                                display: 'grid',
+                                gridTemplateColumns: {
+                                    xs: '1fr',
+                                    sm: 'repeat(2, 1fr)',
+                                    md: 'repeat(3, 1fr)'
+                                },
+                                gap: 3,
+                                mt: 2
+                            }}
+                        >
+                            {documents.map((doc: any) => (
+                                <DocumentCard
+                                    key={doc.id}
+                                    title={doc.title}
+                                    teacher={doc.teacher}
+                                    exam_semester={doc.exam_semester}
+                                    exam_year={doc.exam_year}
+                                    uploader={doc.username || 'Unknown'}
+                                    file={doc.file}
+                                    onDownload={() => handleDownload(doc.id)}
+                                />
+                            ))}
+                        </Box>
                     )
                 )}
             </Container>

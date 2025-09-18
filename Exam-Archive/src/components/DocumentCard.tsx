@@ -1,9 +1,14 @@
 import React from 'react';
-import { Card, CardContent, Typography, Button, Box, Chip, useMediaQuery } from '@mui/material';
+import { Card, CardContent, Typography, Button, Box, Chip, Divider, useMediaQuery } from '@mui/material';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import DescriptionIcon from '@mui/icons-material/Description';
 import ArticleIcon from '@mui/icons-material/Article';
+import DownloadIcon from '@mui/icons-material/Download';
+import PersonIcon from '@mui/icons-material/Person';
+import SchoolIcon from '@mui/icons-material/School';
+import DateRangeIcon from '@mui/icons-material/DateRange';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
 interface DocumentCardProps {
   title: string;
@@ -23,58 +28,157 @@ function getFileIcon(fileName: string) {
   return <InsertDriveFileIcon color="disabled" fontSize="large" />;
 }
 
-const DocumentCard: React.FC<DocumentCardProps> = ({ title, teacher, exam_semester, exam_year, uploader, file, onDownload }) => {
+const DocumentCard: React.FC<DocumentCardProps> = ({ 
+  title, 
+  teacher, 
+  exam_semester, 
+  exam_year, 
+  uploader, 
+  file, 
+  onDownload 
+}) => {
   const isMobile = useMediaQuery('(max-width:600px)');
+  
   return (
     <Card
       sx={{
-        mb: 3,
-        boxShadow: 4,
-        borderRadius: 3,
-        background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
-        p: isMobile ? 1 : 2,
-        transition: 'box-shadow 0.3s',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+        borderRadius: 4,
+        background: 'linear-gradient(145deg, #ffffff 0%, #f8fafc 100%)',
+        border: '1px solid rgba(0,0,0,0.04)',
+        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
         '&:hover': {
-          boxShadow: 8,
+          transform: 'translateY(-8px)',
+          boxShadow: '0 12px 40px rgba(0,0,0,0.15)',
+          '& .download-btn': {
+            background: 'linear-gradient(45deg, #1976D2 30%, #1CB5E0 90%)',
+          }
         },
       }}
     >
-      <CardContent sx={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'flex-start' : 'center', gap: 2 }}>
-        <Box sx={{ minWidth: 56, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <CardContent 
+        sx={{ 
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          textAlign: 'center',
+          p: 3,
+        }}
+      >
+        {/* File Icon Section */}
+        <Box 
+          sx={{ 
+            mb: 3,
+            p: 2,
+            borderRadius: '50%',
+            background: 'linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minWidth: 80,
+            minHeight: 80,
+            boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+          }}
+        >
           {getFileIcon(file)}
         </Box>
-        <Box sx={{ flex: 1 }}>
-          <Typography variant={isMobile ? 'subtitle1' : 'h6'} fontWeight="bold" noWrap>{title}</Typography>
-          <Chip label={file.split('/').pop()} color="default" size={isMobile ? 'small' : 'medium'} sx={{ mt: 1, mb: 1 }} />
-          <Typography variant="body2" color="text.secondary">Teacher: {teacher}</Typography>
-          <Typography variant="body2" color="text.secondary">Semester: {exam_semester}</Typography>
-          <Typography variant="body2" color="text.secondary">Year: {exam_year}</Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>Uploaded by: <b>{uploader}</b></Typography>
+
+        {/* Title Section */}
+        <Typography 
+          variant="h6" 
+          fontWeight="bold" 
+          sx={{ 
+            mb: 2,
+            color: '#1e293b',
+            lineHeight: 1.3,
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
+            minHeight: '3.2em',
+          }}
+        >
+          {title}
+        </Typography>
+
+        {/* File Name Chip */}
+        <Chip 
+          label={file.split('/').pop()} 
+          color="primary"
+          variant="outlined"
+          size="small"
+          sx={{ 
+            mb: 3,
+            fontWeight: 500,
+            backgroundColor: 'rgba(33, 150, 243, 0.08)',
+            borderColor: 'rgba(33, 150, 243, 0.2)',
+          }} 
+        />
+
+        {/* Details Section */}
+        <Box sx={{ width: '100%', mb: 3 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 1.5 }}>
+            <SchoolIcon sx={{ fontSize: 18, color: '#64748b', mr: 1 }} />
+            <Typography variant="body2" color="#475569" fontWeight="500">
+              {teacher}
+            </Typography>
+          </Box>
+          
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 1.5 }}>
+            <DateRangeIcon sx={{ fontSize: 18, color: '#64748b', mr: 1 }} />
+            <Typography variant="body2" color="#475569">
+              {exam_semester}
+            </Typography>
+          </Box>
+          
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 1.5 }}>
+            <CalendarTodayIcon sx={{ fontSize: 18, color: '#64748b', mr: 1 }} />
+            <Typography variant="body2" color="#475569">
+              {exam_year}
+            </Typography>
+          </Box>
+
+          <Divider sx={{ my: 2, borderColor: 'rgba(0,0,0,0.08)' }} />
+          
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <PersonIcon sx={{ fontSize: 18, color: '#64748b', mr: 1 }} />
+            <Typography variant="body2" color="#475569">
+              Uploaded by <strong style={{ color: '#1e293b' }}>{uploader}</strong>
+            </Typography>
+          </Box>
         </Box>
-        <Box sx={{ mt: isMobile ? 2 : 0, width: isMobile ? '100%' : 'auto', textAlign: isMobile ? 'center' : 'right' }}>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={onDownload}
-            sx={{
-              py: isMobile ? 1 : 1.5,
-              px: isMobile ? 2 : 4,
-              borderRadius: 2,
-              fontWeight: 'bold',
-              fontSize: isMobile ? '1rem' : '1.1rem',
-              boxShadow: '0 2px 8px rgba(33,203,243,0.15)',
-              textTransform: 'none',
-              background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
-              '&:hover': {
-                background: 'linear-gradient(45deg, #1976D2 30%, #1CB5E0 90%)',
-                transform: 'translateY(-2px)',
-              },
-            }}
-            fullWidth={isMobile}
-          >
-            Download
-          </Button>
-        </Box>
+
+        {/* Spacer to push button to bottom */}
+        <Box sx={{ flex: 1 }} />
+
+        {/* Download Button */}
+        <Button
+          variant="contained"
+          onClick={onDownload}
+          startIcon={<DownloadIcon />}
+          className="download-btn"
+          sx={{
+            width: '100%',
+            py: 1.5,
+            borderRadius: 3,
+            fontWeight: 600,
+            fontSize: '0.95rem',
+            textTransform: 'none',
+            background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
+            boxShadow: '0 4px 16px rgba(33, 150, 243, 0.3)',
+            transition: 'all 0.3s ease',
+            '&:hover': {
+              transform: 'translateY(-2px)',
+              boxShadow: '0 6px 20px rgba(33, 150, 243, 0.4)',
+            },
+          }}
+        >
+          Download
+        </Button>
       </CardContent>
     </Card>
   );
