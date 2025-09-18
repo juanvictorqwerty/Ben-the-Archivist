@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'knox',
     'corsheaders',
     'ActionsOnFiles',
     'RegisterPublishers'
@@ -59,6 +60,10 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 AUTH_USER_MODEL='RegisterPublishers.CustomUser'
+
+AUTHENTICATION_BACKENDS= [
+    'RegisterPublishers.auth_publishers.EmailAuth'
+]
 
 ROOT_URLCONF = '_Project.urls'
 
@@ -112,6 +117,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES':('knox.auth.TokenAuthentication',)
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
