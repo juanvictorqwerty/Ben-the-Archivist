@@ -1,9 +1,21 @@
-import React, { useState } from 'react';
-import { AppBar, Toolbar, Button, Typography, IconButton, useMediaQuery, useTheme, Drawer, List, ListItem, ListItemText, InputBase } from '@mui/material';
+import { useState } from 'react';
+import {
+    AppBar,
+    Toolbar,
+    Button,
+    Typography,
+    IconButton,
+    useMediaQuery,
+    useTheme,
+    Drawer,
+    List,
+    ListItem,
+    ListItemText,
+    ListItemButton,
+    Box,
+} from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
-import { Box } from '@mui/system';
 import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
 
 function Header() {
     const theme = useTheme();
@@ -16,164 +28,92 @@ function Header() {
     };
 
     const drawer = (
-        <Box
-            onClick={handleDrawerToggle}
-            sx={{ textAlign: 'center' }}
-        >
-            <List>
-                {isAuthenticated ? (
-                    <ListItem Button onClick={() => setIsAuthenticated(false)}>
-                        <ListItemText primary="Logout" />
-                    </ListItem>
-                ) : (
-                    <>
-                        <ListItem Button component={RouterLink} to="/upload">
-                        <ListItemText primary="Upload" />
-                        </ListItem>
-                        <ListItem Button component={RouterLink} to="/login">
-                            <ListItemText primary="Login" />
-                        </ListItem>
-                        <ListItem Button component={RouterLink} to="/signin">
-                            <ListItemText primary="Sign In" />
-                        </ListItem>
-                    </>
-                )}
-            </List>
+        <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
+        <List>
+            {isAuthenticated ? (
+            <ListItem component="button" onClick={() => setIsAuthenticated(false)}>
+                <ListItemText primary="Logout" />
+            </ListItem>
+            ) : (
+            <>
+                <ListItemButton component={RouterLink} to="/upload">
+                <ListItemText primary="Upload" />
+                </ListItemButton>
+                <ListItemButton component={RouterLink} to="/login">
+                <ListItemText primary="Login" />
+                </ListItemButton>
+                <ListItemButton component={RouterLink} to="/signin">
+                <ListItemText primary="Sign In" />
+                </ListItemButton>
+            </>
+            )}
+        </List>
         </Box>
     );
 
     return (
         <AppBar position="fixed">
-            <Toolbar>
-                {isMobile && (
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        edge="start"
-                        onClick={handleDrawerToggle}
-                        sx={{ mr: 2 }}
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                )}
-                <Typography variant="h6" component="div" sx={{ flexGrow: 1, textAlign: 'left' }}>
-                    Exam Archive
-                </Typography>
+        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            {/* Left side */}
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            {isMobile && (
+                <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                edge="start"
+                onClick={handleDrawerToggle}
+                sx={{ mr: 2 }}
+                >
+                <MenuIcon />
+                </IconButton>
+            )}
+            <Typography variant="h6" component="div">
+                Exam Archive
+            </Typography>
+            </Box>
 
-                {isMobile ? (
-                    <Box sx={{
-                        position: 'relative',
-                        borderRadius: theme.shape.borderRadius,
-                        backgroundColor: 'rgba(255, 255, 255, 0.15)',
-                        '&:hover': {
-                            backgroundColor: 'rgba(255, 255, 255, 0.25)',
-                        },
-                        marginLeft: 0,
-                        width: '100%',
-                        maxWidth: '200px',
-                    }}>
-                        <Box sx={{
-                            padding: theme.spacing(0, 2),
-                            height: '100%',
-                            position: 'absolute',
-                            pointerEvents: 'none',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        }}>
-                            <SearchIcon />
-                        </Box>
-                        <InputBase
-                            placeholder="Search…"
-                            inputProps={{ 'aria-label': 'search' }}
-                            sx={{
-                                color: 'inherit',
-                                '& .MuiInputBase-input': {
-                                    padding: theme.spacing(1, 1, 1, `calc(1em + ${theme.spacing(4)})`),
-                                    transition: theme.transitions.create('width'),
-                                    width: '8ch',
-                                    '&:focus': {
-                                        width: '15ch',
-                                    },
-                                },
-                            }}
-                        />
-                    </Box>
+            {/* Right side: Search + Upload + Auth buttons */}
+            <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+            <Button color="inherit" component={RouterLink} to="/search">
+                Search
+            </Button>
+            {/* Hide these buttons on mobile, show only on desktop */}
+            {!isMobile && (
+                <>
+                <Button color="inherit" component={RouterLink} to="/upload">
+                    Upload
+                </Button>
+                {isAuthenticated ? (
+                    <Button color="inherit" onClick={() => setIsAuthenticated(false)}>
+                    Logout
+                    </Button>
                 ) : (
-                    <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-                        <Box sx={{
-                            position: 'relative',
-                            borderRadius: theme.shape.borderRadius,
-                            backgroundColor: 'rgba(255, 255, 255, 0.15)',
-                            '&:hover': {
-                                backgroundColor: 'rgba(255, 255, 255, 0.25)',
-                            },
-                            marginLeft: 0,
-                            width: '100%',
-                            [theme.breakpoints.up('sm')]: {
-                                marginLeft: theme.spacing(1),
-                                width: 'auto',
-                            },
-                        }}>
-                            <Box sx={{
-                                padding: theme.spacing(0, 2),
-                                height: '100%',
-                                position: 'absolute',
-                                pointerEvents: 'none',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                            }}>
-                                <SearchIcon />
-                            </Box>
-                            <InputBase
-                                placeholder="Search…"
-                                inputProps={{ 'aria-label': 'search' }}
-                                sx={{
-                                    color: 'inherit',
-                                    '& .MuiInputBase-input': {
-                                        padding: theme.spacing(1, 1, 1, `calc(1em + ${theme.spacing(4)})`),
-                                        transition: theme.transitions.create('width'),
-                                        width: '12ch',
-                                        '&:focus': {
-                                            width: '20ch',
-                                        },
-                                    },
-                                }}
-                            />
-                        </Box>
-                        <Button color="inherit" component={RouterLink} to="/upload">
-                            Upload
-                        </Button>
-                        {isAuthenticated ? (
-                            <Button color="inherit" onClick={() => setIsAuthenticated(false)}>
-                                Logout
-                            </Button>
-                        ) : (
-                            <>
-                                <Button color="inherit" component={RouterLink} to="/login">
-                                    Login
-                                </Button>
-                                <Button color="inherit" component={RouterLink} to="/signin">
-                                    Sign In
-                                </Button>
-                            </>
-                        )}
-                    </Box>
+                    <>
+                    <Button color="inherit" component={RouterLink} to="/login">
+                        Login
+                    </Button>
+                    <Button color="inherit" component={RouterLink} to="/signin">
+                        Sign In
+                    </Button>
+                    </>
                 )}
-            </Toolbar>
-            <Drawer
-                variant="temporary"
-                open={drawerOpen}
-                onClose={handleDrawerToggle}
-                ModalProps={{
-                    keepMounted: true, // Better open performance on mobile.
-                }}
-            >
-                {drawer}
-            </Drawer>
+                </>
+            )}
+            </Box>
+        </Toolbar>
+
+        <Drawer
+            variant="temporary"
+            open={drawerOpen}
+            onClose={handleDrawerToggle}
+            ModalProps={{
+            keepMounted: true, // Better open performance on mobile.
+            }}
+        >
+            {drawer}
+        </Drawer>
         </AppBar>
     );
-}
+    }
 
 export default Header;
