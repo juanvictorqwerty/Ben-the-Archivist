@@ -26,24 +26,37 @@ class LoginViewset(viewsets.ViewSet):
     permission_classes=[permissions.AllowAny]
     serializer_class=LoginSerializer
 
-    def create(self,request):
+    def create(self, request):
         serializer = self.serializer_class(data=request.data)
-        
         if serializer.is_valid():
-            email=serializer.validated_data['email']
-            password=serializer.validated_data['password']
+            data = serializer.validated_data
+            password = data.get('password')
+            email = data.get('email')
+            username = data.get('username')
 
-            user=authenticate(request,email=email,password=password)
+            user = None
+            if email:
+                user = authenticate(request, email=email, password=password)
+            if not user and username:
+                # Try username if email failed or not provided
+                from django.contrib.auth import get_user_model
+                User = get_user_model()
+                try:
+                    user_obj = User.objects.get(username=username)
+                    if user_obj.check_password(password):
+                        user = user_obj
+                except User.DoesNotExist:
+                    user = None
 
             if user:
-                _,token=AuthToken.objects.create(user)
+                _, token = AuthToken.objects.create(user)
                 return Response(
                     {
-                        'user':self.serializer_class(user).data,
-                        'token':token
+                        'user': self.serializer_class(user).data,
+                        'token': token
                     }
                 )
             else:
-                return Response({'error':'Invalid credentials'},status=401)
+                return Response({'error': 'Invalid credentials'}, status=401)
         else:
-            return Response(serializer.errors,status=400)
+            return Response(serializer.errors, status=400)

@@ -62,7 +62,8 @@ CORS_ALLOWED_ORIGINS = [
 AUTH_USER_MODEL='RegisterPublishers.CustomUser'
 
 AUTHENTICATION_BACKENDS= [
-    'RegisterPublishers.auth_publishers.EmailAuth'
+    'RegisterPublishers.auth_publishers.EmailAuth',
+    'django.contrib.auth.backends.ModelBackend'
 ]
 
 ROOT_URLCONF = '_Project.urls'

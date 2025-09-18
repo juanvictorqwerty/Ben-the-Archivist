@@ -21,15 +21,15 @@ function Header() {
             sx={{ textAlign: 'center' }}
         >
             <List>
-                <ListItem Button component={RouterLink} to="/">
-                    <ListItemText primary="Home" />
-                </ListItem>
                 {isAuthenticated ? (
                     <ListItem Button onClick={() => setIsAuthenticated(false)}>
                         <ListItemText primary="Logout" />
                     </ListItem>
                 ) : (
                     <>
+                        <ListItem Button component={RouterLink} to="/upload">
+                        <ListItemText primary="Upload" />
+                        </ListItem>
                         <ListItem Button component={RouterLink} to="/login">
                             <ListItemText primary="Login" />
                         </ListItem>
@@ -142,6 +142,9 @@ function Header() {
                                 }}
                             />
                         </Box>
+                        <Button color="inherit" component={RouterLink} to="/upload">
+                            Upload
+                        </Button>
                         {isAuthenticated ? (
                             <Button color="inherit" onClick={() => setIsAuthenticated(false)}>
                                 Logout
