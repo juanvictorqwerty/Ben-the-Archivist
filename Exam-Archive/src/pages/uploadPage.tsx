@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
     Box,
     Container,
@@ -11,7 +11,6 @@ import {
     Alert,
     CircularProgress,
     IconButton,
-    Chip,
     Stack
 } from '@mui/material';
 import {
@@ -126,7 +125,7 @@ function Upload() {
             } else {
                 const errorData = await response.json();
                 console.error('Upload error:', errorData);
-                alert('Upload failed: ' + JSON.stringify(errorData));
+                alert('Please log in to upload documents');
                 setUploadStatus('error');
 
             }
@@ -333,7 +332,7 @@ function Upload() {
                                         icon={<Error />}
                                         sx={{ borderRadius: 2 }}
                                     >
-                                        Upload failed. Please try again.
+                                        Upload failed.
                                     </Alert>
                                 )}
 

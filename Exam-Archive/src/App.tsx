@@ -8,6 +8,7 @@ const LoginPage = lazy(()=> import('./pages/loginPage'))
 const NotFound = lazy(()=> import('./pages/notfound'))
 const Upload=lazy(()=>import('./pages/uploadPage'))
 const Search=lazy(()=>import('./pages/searchPage'))
+const Account=lazy(()=>import('./pages/accountPage'))
 
 function App() {
 
@@ -21,6 +22,7 @@ return(
           <Route path='/search' element={<Search/>}/>
           <Route path='/login' element={<LoginPage/>}/>
           <Route path='/upload' element={<Upload/>}/>
+          <Route path='/account' element={<Account/>}/>
           <Route path='*' element={<NotFound/>}/>
         </Routes>
       </Suspense>
