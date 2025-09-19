@@ -25,7 +25,7 @@ function HomePage() {
     }, []);
 
     const handleDownload = (id: number) => {
-        window.open(`http://127.0.0.1:8000/papers/${id}/download/`, '_blank');
+        window.open(`http://127.0.0.1:8000/download/${id}/`, '_blank');
     };
 
     return (

@@ -1,58 +1,35 @@
 import os
 from django.shortcuts import get_object_or_404
+from rest_framework.views import APIView
 from django.http import FileResponse, Http404
-from rest_framework import generics, permissions, status
+from rest_framework import generics, permissions, status, viewsets
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
-
+from django.db.models import Q
 from .models import Papers
 from .serializer import PaperSerializer
 
 
-class PaperListCreateView(generics.ListCreateAPIView):
+class PaperViewSet(viewsets.ModelViewSet):
     """
-    List all papers or create a new paper
-    GET: List all papers (public)
-    POST: Upload new paper (requires authentication)
+    List, create, retrieve, update, and delete papers
     """
     queryset = Papers.objects.all()
     serializer_class = PaperSerializer
     parser_classes = [MultiPartParser, FormParser]
-    
+
     def get_permissions(self):
-        """
-        Custom permissions based on action
-        """
-        if self.request.method == 'POST':  # Upload
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
             permission_classes = [permissions.IsAuthenticated]
-        else:  # List (GET)
+        else:
             permission_classes = [permissions.AllowAny]
         return [permission() for permission in permission_classes]
 
     def perform_create(self, serializer):
-        # Set the user field to the authenticated user
         serializer.save(user=self.request.user)
 
 
-class PaperDetailView(generics.RetrieveUpdateDestroyAPIView):
-    """
-    Retrieve, update or delete a paper
-    """
-    queryset = Papers.objects.all()
-    serializer_class = PaperSerializer
-    parser_classes = [MultiPartParser, FormParser]
-    
-    def get_permissions(self):
-        """
-        Custom permissions based on action
-        """
-        if self.request.method in ['PUT', 'PATCH', 'DELETE']:
-            # Require authentication for updates and deletes
-            permission_classes = [permissions.IsAuthenticated]
-        else:  # GET (retrieve)
-            permission_classes = [permissions.AllowAny]
-        
-        return [permission() for permission in permission_classes]
+    # Remove PaperDetailView, all detail actions handled by PaperViewSet
 
 
 class PaperDownloadView(generics.RetrieveAPIView):
@@ -118,3 +95,15 @@ class PaperDownloadView(generics.RetrieveAPIView):
                 {'error': f'Error downloading file: {str(e)}'}, 
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+        
+class PapersSearchView(APIView):
+	def get(self, request):
+		query = request.GET.get('q', '')
+		if query:
+			results = Papers.objects.filter(
+				Q(title__icontains=query) | Q(file__icontains=query)
+			)
+		else:
+			results = Papers.objects.none()
+		serializer = PaperSerializer(results, many=True)
+		return Response(serializer.data, status=status.HTTP_200_OK)

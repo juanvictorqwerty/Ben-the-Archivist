@@ -1,14 +1,12 @@
+from rest_framework.routers import DefaultRouter
+from django.urls import path, include
+from .views import PaperViewSet, PaperDownloadView, PapersSearchView
 
-from django.urls import path
-from .views import PaperListCreateView, PaperDetailView, PaperDownloadView
+router = DefaultRouter()
+router.register(r'papers', PaperViewSet, basename='paper')
 
 urlpatterns = [
-    # List all papers (GET) and upload new paper (POST)
-    path('papers/', PaperListCreateView.as_view(), name='paper-list-create'),
-    
-    # Get, update, or delete a specific paper
-    path('papers/<int:pk>/', PaperDetailView.as_view(), name='paper-detail'),
-    
-    # Download a specific paper file
-    path('papers/<int:pk>/download/', PaperDownloadView.as_view(), name='paper-download'),
+	path('', include(router.urls)),
+	path('download/<int:pk>/', PaperDownloadView.as_view(), name='download'),
+	path('search/', PapersSearchView.as_view(), name='papers-search'),
 ]

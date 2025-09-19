@@ -30,7 +30,7 @@ function AccountPage() {
     }, []);
 
     const handleDownload = (id: number) => {
-        window.open(`http://127.0.0.1:8000/papers/${id}/download/`, '_blank');
+        window.open(`http://127.0.0.1:8000/download/${id}/`, '_blank');
     };
     // Get current username once for use in rendering
     const username = localStorage.getItem('username') || sessionStorage.getItem('username');
