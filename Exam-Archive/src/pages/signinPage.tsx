@@ -25,6 +25,14 @@ function SignInPage(){
             })
             .then(response => {
                 console.log('Registration successful', response.data);
+                // Store username in localStorage
+                if (username) {
+                    localStorage.setItem('username', username);
+                }
+                // Store token in localStorage if present
+                if (response.data && response.data.token) {
+                    localStorage.setItem('authToken', response.data.token);
+                }
                 navigate('/');
             })
             .catch(error => {

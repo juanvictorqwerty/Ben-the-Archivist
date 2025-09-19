@@ -16,10 +16,15 @@ class RegisterViewSet(viewsets.ViewSet):
     def create(self,request):
         serializer=self.serializer_class(data=request.data)
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        else :
-            return Response(serializer.errors,status=400)
+            user = serializer.save()
+            # Create token for the new user
+            _, token = AuthToken.objects.create(user)
+            return Response({
+                'username': user.username,
+                'token': token
+            })
+        else:
+            return Response(serializer.errors, status=400)
         
 
 class LoginViewset(viewsets.ViewSet):

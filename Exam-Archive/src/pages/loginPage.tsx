@@ -30,6 +30,10 @@ function LoginPage(){
                 if (data && data.token) {
                     localStorage.setItem('authToken', data.token);
                 }
+                // Store username in localStorage if available
+                if (data && data.username) {
+                    localStorage.setItem('username', data.username);
+                }
                 navigate('/');
             } else {
                 const errorData = await response.json();
