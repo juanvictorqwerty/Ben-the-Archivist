@@ -37,12 +37,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'knox',
+    'corsheaders',
     'ActionsOnFiles',
     'RegisterPublishers'
-
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -50,6 +53,17 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:5173'
+]
+
+AUTH_USER_MODEL='RegisterPublishers.CustomUser'
+
+AUTHENTICATION_BACKENDS= [
+    'RegisterPublishers.auth_publishers.EmailAuth',
+    'django.contrib.auth.backends.ModelBackend'
 ]
 
 ROOT_URLCONF = '_Project.urls'
@@ -104,6 +118,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES':('knox.auth.TokenAuthentication',)
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/

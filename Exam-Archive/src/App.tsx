@@ -1,35 +1,35 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { lazy, Suspense } from 'react';
+
+const HomePage = lazy(() => import('./pages/homePage'));
+const SignInPage = lazy(() => import('./pages/signinPage'));
+const LoginPage = lazy(()=> import('./pages/loginPage'))
+const NotFound = lazy(()=> import('./pages/notfound'))
+const Upload=lazy(()=>import('./pages/uploadPage'))
+const Search=lazy(()=>import('./pages/searchPage'))
+const Account=lazy(()=>import('./pages/accountPage'))
 
 function App() {
-  const [count, setCount] = useState(0)
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+return(
+  <div className='App'>
+    <BrowserRouter>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Routes>
+          <Route path='/' element={<HomePage/>}/>
+          <Route path='/signIn' element={<SignInPage/>}/>
+          <Route path='/search' element={<Search/>}/>
+          <Route path='/login' element={<LoginPage/>}/>
+          <Route path='/upload' element={<Upload/>}/>
+          <Route path='/account' element={<Account/>}/>
+          <Route path='*' element={<NotFound/>}/>
+        </Routes>
+      </Suspense>
+    </BrowserRouter>
+  </div>
+
+)
 }
 
 export default App
