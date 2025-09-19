@@ -7,29 +7,51 @@ function AccountPage() {
     const [documents, setDocuments] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        async function fetchDocuments() {
-            try {
-                const response = await fetch('http://127.0.0.1:8000/papers/');
-                if (response.ok) {
-                    const data = await response.json();
-                    // Get current username from localStorage/sessionStorage
-                    const username = localStorage.getItem('username') || sessionStorage.getItem('username');
-                    // Filter documents to only those published by the user
-                    const userDocs = username ? data.filter((doc: any) => doc.username === username) : [];
-                    setDocuments(userDocs);
-                }
-            } catch (error) {
-                console.error('Error fetching documents:', error);
-            } finally {
-                setLoading(false);
+    // Refetch documents function
+    const fetchDocuments = async () => {
+        setLoading(true);
+        try {
+            const response = await fetch('http://127.0.0.1:8000/papers/');
+            if (response.ok) {
+                const data = await response.json();
+                const username = localStorage.getItem('username') || sessionStorage.getItem('username');
+                const userDocs = username ? data.filter((doc: any) => doc.username === username) : [];
+                setDocuments(userDocs);
             }
+        } catch (error) {
+            console.error('Error fetching documents:', error);
+        } finally {
+            setLoading(false);
         }
+    };
+
+    useEffect(() => {
         fetchDocuments();
     }, []);
 
     const handleDownload = (id: number) => {
         window.open(`http://127.0.0.1:8000/papers/${id}/download/`, '_blank');
+    };
+    // Get current username once for use in rendering
+    const username = localStorage.getItem('username') || sessionStorage.getItem('username');
+
+    const handleDelete = async (id: number) => {
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/papers/${id}/`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Token ${localStorage.getItem('authToken')}`,
+                },
+            });
+            if (response.ok) {
+                // Refresh the documents list after deletion
+                await fetchDocuments();
+            } else {
+                alert('Failed to delete document');
+            }
+        } catch (error) {
+            alert('Error deleting document');
+        }
     };
 
     return (
@@ -65,6 +87,7 @@ function AccountPage() {
                                     uploader={doc.username || 'Unknown'}
                                     file={doc.file}
                                     onDownload={() => handleDownload(doc.id)}
+                                    onDelete={username === doc.username ? () => handleDelete(doc.id) : undefined}
                                 />
                             ))}
                         </Box>

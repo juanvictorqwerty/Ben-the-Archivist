@@ -18,6 +18,7 @@ interface DocumentCardProps {
   uploader: string;
   file: string;
   onDownload: () => void;
+  onDelete?: () => void;
 }
 
 function getFileIcon(fileName: string) {
@@ -35,7 +36,8 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
   exam_year, 
   uploader, 
   file, 
-  onDownload 
+  onDownload,
+  onDelete
 }) => {
   const isMobile = useMediaQuery('(max-width:600px)');
   
@@ -179,6 +181,24 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
         >
           Download
         </Button>
+        {onDelete && (
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={onDelete}
+            sx={{
+              width: '100%',
+              mt: 1,
+              py: 1.2,
+              borderRadius: 3,
+              fontWeight: 600,
+              fontSize: '0.95rem',
+              textTransform: 'none',
+            }}
+          >
+            Delete
+          </Button>
+        )}
       </CardContent>
     </Card>
   );
