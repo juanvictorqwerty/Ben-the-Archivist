@@ -1,5 +1,5 @@
 import './App.css'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
 
 const HomePage = lazy(() => import('./pages/homePage'));
@@ -9,6 +9,9 @@ const NotFound = lazy(()=> import('./pages/notfound'))
 const Upload=lazy(()=>import('./pages/uploadPage'))
 const Search=lazy(()=>import('./pages/searchPage'))
 const Account=lazy(()=>import('./pages/accountPage'))
+const EmailRecovery=lazy(()=>import('./pages/emailRecovery'))
+const ResetPasswordPage = lazy(() => import('./pages/resetPassword'));
+
 
 function App() {
 
@@ -23,6 +26,8 @@ return(
           <Route path='/login' element={<LoginPage/>}/>
           <Route path='/upload' element={<Upload/>}/>
           <Route path='/account' element={<Account/>}/>
+          <Route path='/emailRecovery' element={<EmailRecovery/>}/>
+          <Route path='/password-reset' element={<ResetPasswordPage />} />
           <Route path='*' element={<NotFound/>}/>
         </Routes>
       </Suspense>

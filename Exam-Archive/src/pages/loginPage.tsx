@@ -92,7 +92,7 @@ function LoginPage(){
                 </Button>
             </Grid>
             <Box>
-                    <Link href='#' variant="body2">
+                    <Link component={RouterLink} to='/emailRecovery' variant="body2">
                         Forgot your password ?
                     </Link>
             </Box>
