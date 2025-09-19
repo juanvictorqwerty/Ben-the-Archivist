@@ -121,6 +121,8 @@ AUTH_PASSWORD_VALIDATORS = [
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES':('knox.auth.TokenAuthentication',)
 }
+# Knox: Make token never expire
+KNOX_TOKEN_TTL = None
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
