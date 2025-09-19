@@ -41,40 +41,70 @@ function SearchPage() {
     return (
         <>
             <Header />
-            <Container maxWidth="md" sx={{ mt: 4 }}>
-                <Box component="form" onSubmit={handleSearch} sx={{ display: "flex", gap: 2, mb: 4 }}>
+            <Container maxWidth="md" sx={{ mt: 6 }}>
+                <Box
+                    component="form"
+                    onSubmit={handleSearch}
+                    sx={{
+                        display: "flex",
+                        flexWrap: "wrap",
+                        gap: 2,
+                        mb: 5,
+                        p: 3,
+                        background: "#f8fafc",
+                        borderRadius: 4,
+                        boxShadow: "0 2px 16px rgba(0,0,0,0.07)",
+                        alignItems: "center"
+                    }}
+                >
                     <TextField
                         label="Search"
                         value={query}
                         onChange={e => setQuery(e.target.value)}
                         fullWidth
+                        sx={{ minWidth: 180, flex: 2, background: "#fff", borderRadius: 2 }}
                     />
                     <TextField
                         label="Year"
                         value={year}
                         onChange={e => setYear(e.target.value)}
                         type="number"
-                        sx={{ width: 120 }}
+                        sx={{ width: 120, background: "#fff", borderRadius: 2 }}
                     />
                     <TextField
                         label="Semester"
                         select
                         value={semester}
                         onChange={e => setSemester(e.target.value)}
-                        sx={{ width: 140 }}
+                        sx={{ width: 140, background: "#fff", borderRadius: 2 }}
                     >
                         <MenuItem value="">All</MenuItem>
                         {SEMESTERS.map(s => (
                             <MenuItem key={s} value={s}>{s}</MenuItem>
                         ))}
                     </TextField>
-                    <Button type="submit" variant="contained">Search</Button>
+                    <Button
+                        type="submit"
+                        variant="contained"
+                        sx={{
+                            px: 4,
+                            py: 1.5,
+                            borderRadius: 3,
+                            fontWeight: 600,
+                            fontSize: "1rem",
+                            textTransform: "none",
+                            background: "linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)",
+                            boxShadow: "0 4px 16px rgba(33, 150, 243, 0.15)",
+                        }}
+                    >
+                        Search
+                    </Button>
                 </Box>
                 {loading ? (
-                    <Box textAlign="center" mt={4}><CircularProgress /></Box>
+                    <Box textAlign="center" mt={6}><CircularProgress /></Box>
                 ) : (
                     searched && results.length === 0 ? (
-                        <Typography>No results found.</Typography>
+                        <Typography sx={{ mt: 6, textAlign: "center", color: "#64748b" }}>No results found.</Typography>
                     ) : (
                         <Box
                             sx={{
@@ -84,21 +114,35 @@ function SearchPage() {
                                     sm: 'repeat(2, 1fr)',
                                     md: 'repeat(3, 1fr)'
                                 },
-                                gap: 3,
-                                mt: 2
+                                gap: 4,
+                                mt: 2,
+                                mb: 4
                             }}
                         >
                             {results.map((doc: any) => (
-                                <DocumentCard
+                                <Box
                                     key={doc.id}
-                                    title={doc.title}
-                                    teacher={doc.teacher}
-                                    exam_semester={doc.exam_semester}
-                                    exam_year={doc.exam_year}
-                                    uploader={doc.username || 'Unknown'}
-                                    file={doc.file}
-                                    onDownload={() => window.open(`http://127.0.0.1:8000/download/${doc.id}/`, '_blank')}
-                                />
+                                    sx={{
+                                        boxShadow: "0 2px 12px rgba(33,150,243,0.08)",
+                                        borderRadius: 4,
+                                        background: "#fff",
+                                        p: 2,
+                                        transition: "box-shadow 0.2s",
+                                        '&:hover': {
+                                            boxShadow: "0 6px 24px rgba(33,150,243,0.18)"
+                                        }
+                                    }}
+                                >
+                                    <DocumentCard
+                                        title={doc.title}
+                                        teacher={doc.teacher}
+                                        exam_semester={doc.exam_semester}
+                                        exam_year={doc.exam_year}
+                                        uploader={doc.username || 'Unknown'}
+                                        file={doc.file}
+                                        onDownload={() => window.open(`http://127.0.0.1:8000/download/${doc.id}/`, '_blank')}
+                                    />
+                                </Box>
                             ))}
                         </Box>
                     )
