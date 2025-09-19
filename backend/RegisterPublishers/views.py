@@ -58,7 +58,8 @@ class LoginViewset(viewsets.ViewSet):
                 return Response(
                     {
                         'user': self.serializer_class(user).data,
-                        'token': token
+                        'token': token,
+                        'username': user.username
                     }
                 )
             else:

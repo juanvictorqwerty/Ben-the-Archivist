@@ -59,15 +59,11 @@ function Header() {
         // Remove the Knox token
         localStorage.removeItem('authToken');
         sessionStorage.removeItem('authToken');
+        localStorage.removeItem('username');
+        sessionStorage.removeItem('username');
+        // Update the authentication status
         setIsAuthenticated(false);
-        
-        // Optional: Call logout API endpoint
-        // fetch('/api/auth/logout/', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Authorization': `Token ${token}`,
-        //     },
-        // }).catch(err => console.error('Logout API failed:', err));
+
     };
 
     const drawer = (
@@ -115,7 +111,16 @@ function Header() {
                             <MenuIcon />
                         </IconButton>
                     )}
-                    <Typography variant="h6" component="div">
+                    <Typography
+                        variant="h6"
+                        component={RouterLink}
+                        to="/"
+                        sx={{
+                            textDecoration: 'none',
+                            color: 'inherit',
+                            cursor: 'pointer',
+                        }}
+                    >
                         Bob the Archivist
                     </Typography>
                 </Box>
