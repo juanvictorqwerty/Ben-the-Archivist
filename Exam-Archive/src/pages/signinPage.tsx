@@ -87,6 +87,9 @@ function SignInPage(){
                 type={showPassword ? 'text' : 'password'}
                 slotProps={{
                     input:{
+                        inputProps: {
+                        minLength: 8,
+                    },
                     endAdornment: (
                         <InputAdornment position="end">
                             <IconButton

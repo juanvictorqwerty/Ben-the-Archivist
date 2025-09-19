@@ -10,6 +10,7 @@ const Upload=lazy(()=>import('./pages/uploadPage'))
 const Search=lazy(()=>import('./pages/searchPage'))
 const Account=lazy(()=>import('./pages/accountPage'))
 const EmailRecovery=lazy(()=>import('./pages/emailRecovery'))
+const ResetPasswordPage = lazy(() => import('./pages/resetPassword'));
 
 
 function App() {
@@ -26,6 +27,7 @@ return(
           <Route path='/upload' element={<Upload/>}/>
           <Route path='/account' element={<Account/>}/>
           <Route path='/emailRecovery' element={<EmailRecovery/>}/>
+          <Route path='/password-reset' element={<ResetPasswordPage />} />
           <Route path='*' element={<NotFound/>}/>
         </Routes>
       </Suspense>
