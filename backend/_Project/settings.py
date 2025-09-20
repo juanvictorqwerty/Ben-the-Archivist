@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'knox',
     'corsheaders',
     'ActionsOnFiles',
-    'RegisterPublishers'
+    'RegisterPublishers',
+    'storages',
 ]
 
 MIDDLEWARE = [
