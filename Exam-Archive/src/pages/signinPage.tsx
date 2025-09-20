@@ -1,5 +1,5 @@
 import { Container,Paper,TextField,Button,Link, Typography, Box } from "@mui/material"
-import { useState } from 'react';
+import { useState, type FormEvent } from 'react';
 import axios from 'axios';
 import IconButton from '@mui/material/IconButton';
 import { Link as RouterLink,useNavigate } from 'react-router-dom';
@@ -17,7 +17,7 @@ function SignInPage(){
     const [confirmPassword,setConfirmPassword]=useState('')
     const [showPassword, setShowPassword] = useState(false);
 
-    const handleSubmit = (event: React.FormEvent) => {
+    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (confirmPassword==password){
             axios.post(`${API_URL}/register/`, {
@@ -38,8 +38,15 @@ function SignInPage(){
                 navigate('/');
             })
             .catch(error => {
-                console.error('There was an error during registration:', error);
-                alert(`Registration failed: ${error.message}`);
+                if (axios.isAxiosError(error) && error.response) {
+                    // The request was made and the server responded with a status code
+                    // that falls out of the range of 2xx
+                    console.error('Registration error data:', error.response.data);
+                    alert(`Registration failed: ${JSON.stringify(error.response.data)}`);
+                } else {
+                    console.error('There was an error during registration:', error);
+                    alert(`Registration failed: ${error.message}`);
+                }
             });
         }
         else{
@@ -70,7 +77,6 @@ function SignInPage(){
                 fullWidth
                 type="username"
                 id="username"
-                autoComplete="username"
                 autoFocus
                 value={username}
                 onChange={(e)=>setUsername(e.target.value)}
@@ -81,7 +87,7 @@ function SignInPage(){
                 required
                 fullWidth
                 id="password"
-                autoComplete="password"
+                autoComplete="new-password"
                 autoFocus
                 value={password}
                 onChange={(e)=>setPassword(e.target.value)}
@@ -109,7 +115,7 @@ function SignInPage(){
                 required
                 fullWidth
                 id="confirmPassword"
-                autoComplete="confirmPassword"
+                autoComplete="new-password"
                 autoFocus
                 value={confirmPassword}
                 onChange={(e)=>setConfirmPassword(e.target.value)}
