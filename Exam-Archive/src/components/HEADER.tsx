@@ -11,11 +11,15 @@ import {
     List,
     ListItemText,
     ListItemButton,
+    Menu,
+    MenuItem,
     Box,
 } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import  hasKnoxToken  from '../context/ISAUTH';
 import MenuIcon from '@mui/icons-material/Menu';
+import logo from '../assets/logo.png'; // Import your logo
+import MoreVertIcon from '@mui/icons-material/MoreVert'; // Import the 3-dots icon
 
 function Header() {
     const theme = useTheme();
@@ -23,6 +27,7 @@ function Header() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [drawerOpen, setDrawerOpen] = useState(false);
 
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     // Check authentication status on component mount and when token changes
     useEffect(() => {
         const checkAuthStatus = () => {
@@ -44,6 +49,14 @@ function Header() {
         setDrawerOpen(!drawerOpen);
     };
 
+    const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
+
     const handleLogout = () => {
         // Remove the Knox token
         localStorage.removeItem('authToken');
@@ -54,6 +67,7 @@ function Header() {
         setIsAuthenticated(false);
         // Dispatch a custom event to notify other components (like the header)
         window.dispatchEvent(new CustomEvent('authChange'));
+        handleMenuClose(); // Close menu on logout
     };
 
     const drawer = (
@@ -61,6 +75,9 @@ function Header() {
             <List>
                 <ListItemButton component={RouterLink} to="/upload">
                     <ListItemText primary="Upload" />
+                </ListItemButton>
+                <ListItemButton component={RouterLink} to="/about">
+                    <ListItemText primary="About Us" />
                 </ListItemButton>
                 {isAuthenticated ? (
                     <>
@@ -110,20 +127,24 @@ function Header() {
                             <MenuIcon />
                         </IconButton>
                     )}
-                    <Typography
-                        variant="h6"
+                    <Box
                         component={RouterLink}
                         to="/"
                         sx={{
+                            display: 'flex',
+                            alignItems: 'center',
                             textDecoration: 'none',
                             color: 'inherit',
                             cursor: 'pointer',
                             padding: '6px 8px', // Add padding to match button look
                             '&:hover': { backgroundColor: '#003366', color: 'white', borderRadius: '4px' }
                         }}
-                    >
-                        Bob the Archivist
-                    </Typography>
+                    >   
+                        <img src={logo} alt="Bob the Archivist Logo" style={{ height: '30px', marginRight: '10px' }} />
+                        <Typography variant="h6" component="span">
+                            Bob the Archivist
+                        </Typography>
+                    </Box>
                 </Box>
 
                 {/* Right side: Search + Upload + Auth buttons */}
@@ -147,26 +168,52 @@ function Header() {
                             >
                                 Upload
                             </Button>
+                            <Button 
+                                color="inherit" 
+                                component={RouterLink} 
+                                to="/about"
+                                sx={{ '&:hover': { backgroundColor: '#003366', color: 'white' } }}
+                            >
+                                About Us
+                            </Button>
                             {isAuthenticated ? (
                                 <>
-                                    <Button 
-                                        color="inherit" 
-                                        component={RouterLink} to="/account"
-                                        sx={{ '&:hover': { backgroundColor: '#003366', color: 'white' } }}
+                                    <IconButton
+                                        size="large"
+                                        edge="end"
+                                        aria-label="account of current user"
+                                        aria-controls="primary-search-account-menu"
+                                        aria-haspopup="true"
+                                        onClick={handleMenuOpen}
+                                        color="inherit"
                                     >
-                                        Account
-                                    </Button>
-                                    <Button 
-                                        color="inherit" 
-                                        onClick={handleLogout}
-                                        sx={{ 
-                                            color: 'white', 
-                                            backgroundColor: 'red', 
-                                            '&:hover': { backgroundColor: 'darkred' } 
+                                        <MoreVertIcon />
+                                    </IconButton>
+                                    <Menu
+                                        id="primary-search-account-menu"
+                                        anchorEl={anchorEl}
+                                        anchorOrigin={{
+                                            vertical: 'top',
+                                            horizontal: 'right',
                                         }}
+                                        keepMounted
+                                        transformOrigin={{
+                                            vertical: 'top',
+                                            horizontal: 'right',
+                                        }}
+                                        open={Boolean(anchorEl)}
+                                        onClose={handleMenuClose}
                                     >
-                                        Logout
-                                    </Button>
+                                        <MenuItem component={RouterLink} to="/account" onClick={handleMenuClose}>
+                                            Account
+                                        </MenuItem>
+                                        <MenuItem 
+                                            onClick={handleLogout} 
+                                            sx={{ color: 'red' }}
+                                        >
+                                            Logout
+                                        </MenuItem>
+                                    </Menu>
                                 </>
                             ) : (
                                 <>
