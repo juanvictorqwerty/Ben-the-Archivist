@@ -17,7 +17,7 @@ function SignInPage(){
     const [confirmPassword,setConfirmPassword]=useState('')
     const [showPassword, setShowPassword] = useState(false);
 
-    const handleSubmit=(event: { preventDefault: () => void; })=>{
+    const handleSubmit=(event)=>{
         event.preventDefault();
         if (confirmPassword==password){
             axios.post(`${API_URL}/register/`, {
