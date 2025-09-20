@@ -1,6 +1,7 @@
 
 import { useState } from "react";
 import { Container, Box, TextField, Button, Typography, Alert } from "@mui/material";
+import API_URL from "../context/apiConfig";
 
 function EmailRecovery() {
     const [email, setEmail] = useState("");
@@ -14,7 +15,7 @@ function EmailRecovery() {
         setSuccess("");
         setError("");
         try {
-            const response = await fetch("http://127.0.0.1:8000/api/password-reset/", {
+            const response = await fetch(`${API_URL}/api/password-reset/`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email }),

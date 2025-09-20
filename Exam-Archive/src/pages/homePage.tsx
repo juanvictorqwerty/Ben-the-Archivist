@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import Header from "../components/HEADER";
 import DocumentCard from "../components/DocumentCard";
 import { Toolbar, Container, Typography, CircularProgress, Box } from '@mui/material';
+import API_URL from "../context/apiConfig";
+
 
 function HomePage() {
     const [documents, setDocuments] = useState([]);
@@ -10,10 +12,12 @@ function HomePage() {
     useEffect(() => {
         async function fetchDocuments() {
             try {
-                const response = await fetch('http://127.0.0.1:8000/papers/');
+                const response = await fetch(`${API_URL}/papers/`);
                 if (response.ok) {
                     const data = await response.json();
-                    setDocuments(data);
+                    // Sort documents by ID in descending order to show latest first
+                    const sortedData = data.sort((a: any, b: any) => b.id - a.id);
+                    setDocuments(sortedData);
                 }
             } catch (error) {
                 console.error('Error fetching documents:', error);
@@ -25,7 +29,7 @@ function HomePage() {
     }, []);
 
     const handleDownload = (id: number) => {
-        window.open(`http://127.0.0.1:8000/download/${id}/`, '_blank');
+        window.open(`${API_URL}/download/${id}/`, '_blank');
     };
 
     return (

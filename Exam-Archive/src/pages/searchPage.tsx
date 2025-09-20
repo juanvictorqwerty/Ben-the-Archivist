@@ -2,8 +2,9 @@ import { useState } from "react";
 import Header from "../components/HEADER";
 import DocumentCard from "../components/DocumentCard";
 import { Container, Box, TextField, Button, MenuItem, Typography, CircularProgress } from "@mui/material";
+import API_URL from "../context/apiConfig";
 
-const SEMESTERS = ["Spring", "Summer", "Fall", "Winter"];
+const SEMESTERS = ["Spring", "Summer", "Fall"];
 
 function SearchPage() {
     const [query, setQuery] = useState("");
@@ -140,7 +141,7 @@ function SearchPage() {
                                         exam_year={doc.exam_year}
                                         uploader={doc.username || 'Unknown'}
                                         file={doc.file}
-                                        onDownload={() => window.open(`http://127.0.0.1:8000/download/${doc.id}/`, '_blank')}
+                                        onDownload={() => window.open(`${API_URL}/download/${doc.id}/`, '_blank')}
                                     />
                                 </Box>
                             ))}

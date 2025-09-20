@@ -6,6 +6,8 @@ import { Link as RouterLink,useNavigate } from 'react-router-dom';
 import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import API_URL from "../context/apiConfig";
+
 
 function SignInPage(){
     const navigate = useNavigate();
@@ -18,7 +20,7 @@ function SignInPage(){
     const handleSubmit=(event: { preventDefault: () => void; })=>{
         event.preventDefault();
         if (confirmPassword==password){
-            axios.post('http://127.0.0.1:8000/register/', {
+            axios.post(`${API_URL}/register/`, {
                 username:username,
                 email: email,
                 password: password

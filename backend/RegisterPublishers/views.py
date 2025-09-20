@@ -7,7 +7,7 @@ from django.contrib.auth import get_user_model,authenticate
 from knox.models import AuthToken
 
 
-User=get_user_model
+User=get_user_model()
 
 class RegisterViewSet(viewsets.ViewSet):
     permission_classes=[permissions.AllowAny]
@@ -36,28 +36,19 @@ class LoginViewset(viewsets.ViewSet):
         if serializer.is_valid():
             data = serializer.validated_data
             password = data.get('password')
-            email = data.get('email')
-            username = data.get('username')
+            # Correctly get and clean the email
+            email = data.get('email', '').strip().lower()
 
-            user = None
-            if email:
-                user = authenticate(request, email=email, password=password)
-            if not user and username:
-                # Try username if email failed or not provided
-                from django.contrib.auth import get_user_model
-                User = get_user_model()
-                try:
-                    user_obj = User.objects.get(username=username)
-                    if user_obj.check_password(password):
-                        user = user_obj
-                except User.DoesNotExist:
-                    user = None
+            user = authenticate(request, email=email, password=password)
 
             if user:
                 _, token = AuthToken.objects.create(user)
+                # Use the RegisterSerializer to get user data, excluding password
+                user_data = RegisterSerializer(user).data
+                user_data.pop('password', None)
                 return Response(
                     {
-                        'user': self.serializer_class(user).data,
+                        'user': user_data,
                         'token': token,
                         'username': user.username
                     }

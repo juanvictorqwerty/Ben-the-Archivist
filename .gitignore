@@ -28,3 +28,14 @@ backend/ActionsOnFiles/__pycache__/
 backend/ActionsOnFiles/migrations/__pycache__/
 backend/RegisterPublishers/__pycache__/
 backend/RegisterPublishers/migrations/__pycache__/
+
+# Python
+*.pyc
+__pycache__/
+
+# Django
+*.log
+db.sqlite3
+
+# Environment variables
+backend/.env

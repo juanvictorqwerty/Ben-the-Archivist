@@ -22,6 +22,7 @@ import {
 } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 import Header from "../components/HEADER";
+import API_URL from '../context/apiConfig';
 
 const UploadBox = styled(Box)(({ theme, isDragActive }) => ({
     border: `2px dashed ${isDragActive ? theme.palette.primary.main : theme.palette.grey[400]}`,
@@ -105,7 +106,7 @@ function Upload() {
         uploadData.append('exam_year', formData.exam_year);
 
         try {
-            const response = await fetch('http://127.0.0.1:8000/papers/', {
+            const response = await fetch(`${API_URL}/papers/`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Token ${localStorage.getItem('authToken')}`
@@ -295,7 +296,6 @@ function Upload() {
                                             <MenuItem value="Fall">Fall</MenuItem>
                                             <MenuItem value="Spring">Spring</MenuItem>
                                             <MenuItem value="Summer">Summer</MenuItem>
-                                            <MenuItem value="Winter">Winter</MenuItem>
                                         </TextField>
                                     </Grid>
                                     
