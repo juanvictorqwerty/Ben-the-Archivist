@@ -53,13 +53,6 @@ class PaperDownloadView(generics.RetrieveAPIView):
                     status=status.HTTP_404_NOT_FOUND
                 )
             
-            # Check if file exists on filesystem
-            if not os.path.exists(paper.file.path):
-                return Response(
-                    {'error': 'File does not exist on server'}, 
-                    status=status.HTTP_404_NOT_FOUND
-                )
-            
             # Extract clean filename
             filename = os.path.basename(paper.file.name)
             
@@ -84,11 +77,6 @@ class PaperDownloadView(generics.RetrieveAPIView):
             return Response(
                 {'error': 'Permission denied to access file'}, 
                 status=status.HTTP_403_FORBIDDEN
-            )
-        except FileNotFoundError:
-            return Response(
-                {'error': 'File not found on server'}, 
-                status=status.HTTP_404_NOT_FOUND
             )
         except Exception as e:
             return Response(

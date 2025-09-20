@@ -159,3 +159,22 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')  # Replace with your Gmail address
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')   # Replace with your Gmail App Password
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')  # Replace with your Gmail address
+
+# Supabase Storage Settings (using S3 backend)
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+# Get these from your Supabase project's Storage settings
+AWS_ACCESS_KEY_ID = os.environ.get('SUPABASE_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('SUPABASE_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = os.environ.get('SUPABASE_BUCKET_NAME')
+
+# Supabase URL is in the format: https://<project_id>.supabase.co
+# The endpoint URL should be the storage URL from your Supabase project settings.
+AWS_S3_ENDPOINT_URL = f"https://{os.environ.get('SUPABASE_PROJECT_ID')}.supabase.co/storage/v1"
+
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+AWS_LOCATION = 'public' # Or the folder inside your bucket you want to use. 'public' is common.
+AWS_S3_FILE_OVERWRITE = False # Set to True if you want to overwrite files with the same name
+AWS_DEFAULT_ACL = None # Supabase handles permissions via its own policies
