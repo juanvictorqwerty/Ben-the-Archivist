@@ -34,7 +34,7 @@ def password_reset_token_created( reset_password_token,*args,**kwargs):
     # Use the frontend URL from environment variables
     sitelink = os.environ.get('FRONTEND_URL', 'http://localhost:5173')
     token = '?token={}'.format(reset_password_token.key)
-    full_link = f"{sitelink}/password-reset{token}"
+    full_link = f"{sitelink}/passwordReset{token}"
     print(full_link)
 
     subject = 'Password Reset Requested'

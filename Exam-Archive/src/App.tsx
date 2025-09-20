@@ -29,7 +29,7 @@ return(
           <Route path='/upload' element={<Upload/>}/>
           <Route path='/account' element={<Account/>}/>
           <Route path='/emailRecovery' element={<EmailRecovery/>}/>
-          <Route path='/password-reset' element={<ResetPasswordPage />} />
+          <Route path='/passwordReset' element={<ResetPasswordPage />} />
           <Route path='/about' element={<AboutUsPage />} />
           <Route path='*' element={<NotFound/>}/>
         </Routes>
