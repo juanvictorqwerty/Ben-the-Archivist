@@ -18,7 +18,7 @@ function SearchPage() {
         e.preventDefault();
         setLoading(true);
         setSearched(true);
-        let url = `http://127.0.0.1:8000/search/?q=${encodeURIComponent(query)}`;
+        let url = `${API_URL}/search/?q=${encodeURIComponent(query)}`;
         if (year) url += `&year=${year}`;
         if (semester) url += `&semester=${encodeURIComponent(semester)}`;
         try {

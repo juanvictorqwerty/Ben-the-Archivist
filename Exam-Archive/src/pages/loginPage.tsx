@@ -1,4 +1,4 @@
-import { Container,Paper,TextField,Button,Grid,Link, Typography, Box } from "@mui/material"
+import { Container,Paper,TextField,Button,Link, Typography, Box } from "@mui/material"
 import { useState } from 'react';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -13,7 +13,7 @@ function LoginPage(){
     const [password,setPassword]=useState('');
     const [showPassword, setShowPassword] = useState(false);
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         try {
             const response = await fetch(`${API_URL}/login/`, {
@@ -41,7 +41,7 @@ function LoginPage(){
                 alert(errorData.detail || 'Login failed');
             }
         } catch (error) {
-            alert(error.message || 'Network error');
+            alert((error as Error)?.message || 'Network error');
         }
     };
     return(
@@ -83,7 +83,7 @@ function LoginPage(){
                     }}}
                     
             />
-            <Grid item xs={12} style={{ textAlign: 'center' }}>
+            
                 <Button
                     type="submit"
                     variant="contained"
@@ -91,7 +91,7 @@ function LoginPage(){
                 >
                     Enter
                 </Button>
-            </Grid>
+            
             <Box>
                     <Link component={RouterLink} to='/emailRecovery' variant="body2">
                         Forgot your password ?
