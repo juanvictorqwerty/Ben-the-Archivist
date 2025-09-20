@@ -102,7 +102,11 @@ DATABASES = {
         'HOST': os.environ.get('DB_HOST'),
         'USER': os.environ.get('DB_USER'),
         'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'PORT': os.environ.get('DB_PORT')
+        'PORT': int(os.environ.get('DB_PORT')),
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+            'charset': 'utf8mb4',
+        }
     }
 }
 
@@ -155,5 +159,3 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')  # Replace with your Gmail address
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')   # Replace with your Gmail App Password
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')  # Replace with your Gmail address
-
-
