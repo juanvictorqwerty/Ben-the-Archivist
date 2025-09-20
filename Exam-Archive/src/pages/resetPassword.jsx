@@ -43,7 +43,7 @@ function ResetPasswordPage() {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
-    const [token, setToken] = useState<string | null>(null);
+    const [token, setToken] = useState(null);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
@@ -57,7 +57,7 @@ function ResetPasswordPage() {
         }
     }, [location]);
 
-    const handleSubmit = (event: React.FormEvent) => {
+    const handleSubmit = (event) => {
         event.preventDefault();
         setError('');
         setLoading(true);
@@ -121,11 +121,7 @@ function ResetPasswordPage() {
                         onChange={(e) => setPassword(e.target.value)}
                         autoComplete="new-password"
                         autoFocus
-                        slotProps={{
-                            input:{
-                                inputProps: {
-                                minLength: 8,
-                            },
+                        InputProps={{ // Changed slotProps to InputProps
                             endAdornment: (
                                 <InputAdornment position="end">
                                     <IconButton
@@ -135,8 +131,9 @@ function ResetPasswordPage() {
                                         {showPassword ? <Visibility /> : <VisibilityOff />}
                                     </IconButton>
                                 </InputAdornment>
-                            )
-                        }}}
+                            ),
+                            inputProps: { minLength: 8 } // Added inputProps here
+                        }}
                     />
                     <TextField
                         margin="normal"
@@ -149,10 +146,7 @@ function ResetPasswordPage() {
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         autoComplete="new-password"
                         slotProps={{
-                            input:{
-                                inputProps: {
-                                    minLength: 8,
-                                },
+                            input: {
                                 endAdornment: (
                                     <InputAdornment position="end">
                                         <IconButton
@@ -162,8 +156,10 @@ function ResetPasswordPage() {
                                             {showPassword ? <Visibility /> : <VisibilityOff />}
                                         </IconButton>
                                     </InputAdornment>
-                                )
-                            }}}
+                                ),
+                                inputProps: { minLength: 8 }
+                            }
+                        }}
                     />
                     <Grid item xs={12} style={{ textAlign: 'center' }}>
                         <Button

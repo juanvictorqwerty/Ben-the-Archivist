@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardContent, Typography, Button, Box, Chip, Divider, useMediaQuery } from '@mui/material';
+import { Card, CardContent, Typography, Button, Box, Chip, Divider } from '@mui/material';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import DescriptionIcon from '@mui/icons-material/Description';
@@ -39,7 +39,7 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
   onDownload,
   onDelete
 }) => {
-  const isMobile = useMediaQuery('(max-width:600px)');
+  
   
   return (
     <Card

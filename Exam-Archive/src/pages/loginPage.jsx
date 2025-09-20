@@ -13,7 +13,7 @@ function LoginPage(){
     const [password,setPassword]=useState('');
     const [showPassword, setShowPassword] = useState(false);
 
-    const handleSubmit = async (event: { preventDefault: () => void }) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         try {
             const response = await fetch(`${API_URL}/login/`, {
@@ -40,7 +40,7 @@ function LoginPage(){
                 const errorData = await response.json();
                 alert(errorData.detail || 'Login failed');
             }
-        } catch (error: any) {
+        } catch (error) {
             alert(error.message || 'Network error');
         }
     };
