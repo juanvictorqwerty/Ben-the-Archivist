@@ -7,7 +7,7 @@ from django.contrib.auth import get_user_model,authenticate
 from knox.models import AuthToken
 
 
-User=get_user_model
+User=get_user_model()
 
 class RegisterViewSet(viewsets.ViewSet):
     permission_classes=[permissions.AllowAny]
@@ -36,7 +36,7 @@ class LoginViewset(viewsets.ViewSet):
         if serializer.is_valid():
             data = serializer.validated_data
             password = data.get('password')
-            email = data.get('email')
+            email = data.get('email').strip().tolower()
             username = data.get('username')
 
             user = None
