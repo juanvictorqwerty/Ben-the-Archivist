@@ -13,7 +13,7 @@ function LoginPage(){
     const [password,setPassword]=useState('');
     const [showPassword, setShowPassword] = useState(false);
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         try {
             const response = await fetch(`${API_URL}/login/`, {
@@ -41,7 +41,7 @@ function LoginPage(){
                 alert(errorData.detail || 'Login failed');
             }
         } catch (error) {
-            alert(error.message || 'Network error');
+            alert((error as Error)?.message || 'Network error');
         }
     };
     return(

@@ -1,6 +1,6 @@
-import { TextField, Button, Grid, Typography, Box, Container, Paper, Alert } from "@mui/material"
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect, type JSX } from 'react';
+import { TextField, Button, Grid, Typography, Box, Container, Paper, Alert } from "@mui/material";
+import axios, { AxiosError, type AxiosRequestConfig } from 'axios';
 import IconButton from '@mui/material/IconButton';
 import { useNavigate, useLocation } from 'react-router-dom';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -8,10 +8,16 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import API_URL from "../context/apiConfig";
 
+// Extend AxiosRequestConfig to include retry properties
+interface CustomAxiosRequestConfig extends AxiosRequestConfig {
+    retry?: number;
+    retryDelay?: number;
+    __retryCount?: number;
+}
 
 // Add a retry interceptor to axios
-axios.interceptors.response.use(undefined, (err) => {
-    const config = err.config;
+axios.interceptors.response.use(undefined, (err: AxiosError) => {
+    const config = err.config as CustomAxiosRequestConfig;
     // If config does not exist or the retry option is not set, reject
     if (!config || !config.retry) return Promise.reject(err);
 
@@ -27,9 +33,9 @@ axios.interceptors.response.use(undefined, (err) => {
     config.__retryCount += 1;
 
     // Create new promise to handle exponential backoff
-    const backoff = new Promise((resolve) => {
+    const backoff = new Promise<void>((resolve) => {
         setTimeout(() => {
-            resolve(void 0);
+            resolve();
         }, config.retryDelay || 1000);
     });
 
@@ -37,15 +43,19 @@ axios.interceptors.response.use(undefined, (err) => {
     return backoff.then(() => axios(config));
 });
 
-function ResetPasswordPage() {
+interface ApiErrorResponse {
+    [key: string]: string[] | string;
+}
+
+function ResetPasswordPage(): JSX.Element {
     const navigate = useNavigate();
     const location = useLocation();
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [showPassword, setShowPassword] = useState(false);
-    const [token, setToken] = useState(null);
-    const [error, setError] = useState('');
-    const [loading, setLoading] = useState(false);
+    const [password, setPassword] = useState<string>('');
+    const [confirmPassword, setConfirmPassword] = useState<string>('');
+    const [showPassword, setShowPassword] = useState<boolean>(false);
+    const [token, setToken] = useState<string | null>(null);
+    const [error, setError] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
         const searchParams = new URLSearchParams(location.search);
@@ -57,7 +67,7 @@ function ResetPasswordPage() {
         }
     }, [location]);
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
         event.preventDefault();
         setError('');
         setLoading(true);
@@ -74,34 +84,49 @@ function ResetPasswordPage() {
             return;
         }
 
-        axios.post(`${API_URL}/api/password-reset/confirm/`, {
-            password:password,
-            token: token,
-        }, {
-            // @ts-ignore - Add custom config for retry
-            retry: 3, // Number of retries
-            retryDelay: 1000, // Delay between retries in ms
-        })
-                .then(response => {
-                    console.log('Password reset successful', response.data);
-                    alert('Password has been reset successfully! You can now log in.');
-                    navigate('/login');
-                })
-                .catch(error => {
-                    
-                    console.error('There was an error during password reset:', error);
-                    // Extract and display the specific validation error message
-                    let errorMessage = "An unexpected error occurred. Please try again.";
-                    if (error.response?.data) {
-                        // django-rest-framework often returns errors as { field_name: ["error message"] }
-                        const errorKey = Object.keys(error.response.data)[0];
-                        errorMessage = `${errorKey}: ${error.response.data[errorKey]}`;
-                    }
-                    setError(`Password reset failed: ${errorMessage}`);
-                })
-                .finally(() => {
-                    setLoading(false);
-                });
+        try {
+            const response = await axios.post(`${API_URL}/api/password-reset/confirm/`, {
+                password: password,
+                token: token,
+            }, {
+                retry: 3, // Number of retries
+                retryDelay: 1000, // Delay between retries in ms
+            } as CustomAxiosRequestConfig);
+
+            console.log('Password reset successful', response.data);
+            alert('Password has been reset successfully! You can now log in.');
+            navigate('/login');
+        } catch (error) {
+            console.error('There was an error during password reset:', error);
+            
+            // Extract and display the specific validation error message
+            let errorMessage = "An unexpected error occurred. Please try again.";
+            
+            if (axios.isAxiosError(error) && error.response?.data) {
+                const errorData = error.response.data as ApiErrorResponse;
+                // django-rest-framework often returns errors as { field_name: ["error message"] }
+                const errorKey = Object.keys(errorData)[0];
+                const errorValue = errorData[errorKey];
+                const message = Array.isArray(errorValue) ? errorValue[0] : errorValue;
+                errorMessage = `${errorKey}: ${message}`;
+            }
+            
+            setError(`Password reset failed: ${errorMessage}`);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+        setPassword(e.target.value);
+    };
+
+    const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+        setConfirmPassword(e.target.value);
+    };
+
+    const togglePasswordVisibility = (): void => {
+        setShowPassword(!showPassword);
     };
 
     return (
@@ -118,22 +143,23 @@ function ResetPasswordPage() {
                         label="New Password"
                         type={showPassword ? 'text' : 'password'}
                         value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        onChange={handlePasswordChange}
                         autoComplete="new-password"
                         autoFocus
-                        InputProps={{ // Changed slotProps to InputProps
+                        InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end">
                                     <IconButton
-                                        onClick={() => setShowPassword(!showPassword)}
+                                        onClick={togglePasswordVisibility}
                                         edge="end"
+                                        aria-label="toggle password visibility"
                                     >
                                         {showPassword ? <Visibility /> : <VisibilityOff />}
                                     </IconButton>
                                 </InputAdornment>
                             ),
-                            inputProps: { minLength: 8 } // Added inputProps here
                         }}
+                        inputProps={{ minLength: 8 }}
                     />
                     <TextField
                         margin="normal"
@@ -143,23 +169,22 @@ function ResetPasswordPage() {
                         label="Confirm New Password"
                         type={showPassword ? 'text' : 'password'}
                         value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        onChange={handleConfirmPasswordChange}
                         autoComplete="new-password"
-                        slotProps={{
-                            input: {
-                                endAdornment: (
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                            onClick={() => setShowPassword(!showPassword)}
-                                            edge="end"
-                                        >
-                                            {showPassword ? <Visibility /> : <VisibilityOff />}
-                                        </IconButton>
-                                    </InputAdornment>
-                                ),
-                                inputProps: { minLength: 8 }
-                            }
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        onClick={togglePasswordVisibility}
+                                        edge="end"
+                                        aria-label="toggle password visibility"
+                                    >
+                                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
                         }}
+                        inputProps={{ minLength: 8 }}
                     />
                     <Grid item xs={12} style={{ textAlign: 'center' }}>
                         <Button
@@ -176,4 +201,5 @@ function ResetPasswordPage() {
         </Container>
     );
 }
+
 export default ResetPasswordPage;

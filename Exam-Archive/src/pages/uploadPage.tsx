@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState, type JSX } from 'react';
 import {
     Box,
     Container,
@@ -24,7 +24,20 @@ import { styled } from '@mui/material/styles';
 import Header from "../components/HEADER";
 import API_URL from '../context/apiConfig';
 
-const UploadBox = styled(Box)(({ theme, isDragActive }) => ({
+interface UploadBoxProps {
+    isDragActive: boolean;
+}
+
+interface FormData {
+    title: string;
+    teacher: string;
+    exam_semester: string;
+    exam_year: string;
+}
+
+type UploadStatus = 'success' | 'error' | null;
+
+const UploadBox = styled(Box)<UploadBoxProps>(({ theme, isDragActive }) => ({
     border: `2px dashed ${isDragActive ? theme.palette.primary.main : theme.palette.grey[400]}`,
     borderRadius: theme.spacing(2),
     padding: theme.spacing(4),
@@ -42,19 +55,19 @@ const HiddenInput = styled('input')({
     display: 'none'
 });
 
-function Upload() {
-    const [dragActive, setDragActive] = useState(false);
-    const [file, setFile] = useState(null);
-    const [uploading, setUploading] = useState(false);
-    const [uploadStatus, setUploadStatus] = useState(null);
-    const [formData, setFormData] = useState({
+function Upload(): JSX.Element {
+    const [dragActive, setDragActive] = useState<boolean>(false);
+    const [file, setFile] = useState<File | null>(null);
+    const [uploading, setUploading] = useState<boolean>(false);
+    const [uploadStatus, setUploadStatus] = useState<UploadStatus>(null);
+    const [formData, setFormData] = useState<FormData>({
         title: '',
         teacher: '',
         exam_semester: '',
         exam_year: ''
     });
 
-    const handleDrag = (e) => {
+    const handleDrag = (e: React.DragEvent<HTMLDivElement>): void => {
         e.preventDefault();
         e.stopPropagation();
         if (e.type === "dragenter" || e.type === "dragover") {
@@ -64,7 +77,7 @@ function Upload() {
         }
     };
 
-    const handleDrop = (e) => {
+    const handleDrop = (e: React.DragEvent<HTMLDivElement>): void => {
         e.preventDefault();
         e.stopPropagation();
         setDragActive(false);
@@ -74,24 +87,24 @@ function Upload() {
         }
     };
 
-    const handleFileSelect = (e) => {
+    const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>): void => {
         if (e.target.files && e.target.files[0]) {
             setFile(e.target.files[0]);
         }
     };
 
-    const handleInputChange = (e) => {
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         setFormData({
             ...formData,
             [e.target.name]: e.target.value
         });
     };
 
-    const removeFile = () => {
+    const removeFile = (): void => {
         setFile(null);
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
         if (!file) return;
 
@@ -128,7 +141,6 @@ function Upload() {
                 console.error('Upload error:', errorData);
                 alert('Please log in to upload documents');
                 setUploadStatus('error');
-
             }
         } catch (error) {
             console.error('Upload error:', error);
@@ -136,6 +148,18 @@ function Upload() {
         } finally {
             setUploading(false);
         }
+    };
+
+    const handleUploadBoxClick = (): void => {
+        const fileInput = document.getElementById('file-input') as HTMLInputElement;
+        if (fileInput) {
+            fileInput.click();
+        }
+    };
+
+    const handleRemoveFileClick = (e: React.MouseEvent<HTMLButtonElement>): void => {
+        e.stopPropagation();
+        removeFile();
     };
 
     return (
@@ -187,7 +211,7 @@ function Upload() {
                                     onDragLeave={handleDrag}
                                     onDragOver={handleDrag}
                                     onDrop={handleDrop}
-                                    onClick={() => document.getElementById('file-input').click()}
+                                    onClick={handleUploadBoxClick}
                                 >
                                     <HiddenInput
                                         id="file-input"
@@ -242,10 +266,7 @@ function Upload() {
                                                 </Box>
                                             </Box>
                                             <IconButton 
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    removeFile();
-                                                }}
+                                                onClick={handleRemoveFileClick}
                                                 size="small"
                                             >
                                                 <Close />
@@ -256,7 +277,7 @@ function Upload() {
 
                                 {/* Form Fields */}
                                 <Grid container spacing={3}>
-                                    <Grid item xs={12} md={6}>
+                                    <Grid xs={12} md={6}>
                                         <TextField
                                             fullWidth
                                             label="Document Title"
@@ -269,7 +290,7 @@ function Upload() {
                                         />
                                     </Grid>
                                     
-                                    <Grid item xs={12} md={6}>
+                                    <Grid xs={12} md={6}>
                                         <TextField
                                             fullWidth
                                             label="Teacher/Professor"
@@ -282,7 +303,7 @@ function Upload() {
                                         />
                                     </Grid>
                                     
-                                    <Grid item xs={12} md={6}>
+                                    <Grid xs={12} md={6}>
                                         <TextField
                                             select
                                             fullWidth
@@ -299,7 +320,7 @@ function Upload() {
                                         </TextField>
                                     </Grid>
                                     
-                                    <Grid item xs={12} md={6}>
+                                    <Grid xs={12} md={6}>
                                         <TextField
                                             fullWidth
                                             type="number"
