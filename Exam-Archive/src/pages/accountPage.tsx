@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import Header from "../components/HEADER";
 import DocumentCard from "../components/DocumentCard";
 import { Toolbar, Container, Typography, CircularProgress, Box } from '@mui/material';
+import API_URL from '../context/apiConfig';
 
 function AccountPage() {
     const [documents, setDocuments] = useState([]);
@@ -11,7 +12,7 @@ function AccountPage() {
     const fetchDocuments = async () => {
         setLoading(true);
         try {
-            const response = await fetch('http://127.0.0.1:8000/papers/');
+            const response = await fetch(`${API_URL}/papers/`);
             if (response.ok) {
                 const data = await response.json();
                 const username = localStorage.getItem('username') || sessionStorage.getItem('username');
@@ -30,14 +31,14 @@ function AccountPage() {
     }, []);
 
     const handleDownload = (id: number) => {
-        window.open(`http://127.0.0.1:8000/download/${id}/`, '_blank');
+        window.open(`${API_URL}/download/${id}/`, '_blank');
     };
     // Get current username once for use in rendering
     const username = localStorage.getItem('username') || sessionStorage.getItem('username');
 
     const handleDelete = async (id: number) => {
         try {
-            const response = await fetch(`http://127.0.0.1:8000/papers/${id}/`, {
+            const response = await fetch(`${API_URL}/papers/${id}/`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Token ${localStorage.getItem('authToken')}`,

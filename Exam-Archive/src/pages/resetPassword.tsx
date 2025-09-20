@@ -6,6 +6,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import API_URL from "../context/apiConfig";
+
 
 // Add a retry interceptor to axios
 axios.interceptors.response.use(undefined, (err) => {
@@ -72,7 +74,7 @@ function ResetPasswordPage() {
             return;
         }
 
-        axios.post('http://127.0.0.1:8000/api/password-reset/confirm/', {
+        axios.post(`${API_URL}/api/password-reset/confirm/`, {
             password:password,
             token: token,
         }, {
@@ -146,7 +148,22 @@ function ResetPasswordPage() {
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         autoComplete="new-password"
-                        inputProps={{ minLength: 8 }}
+                        slotProps={{
+                            input:{
+                                inputProps: {
+                                    minLength: 8,
+                                },
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            edge="end"
+                                        >
+                                            {showPassword ? <Visibility /> : <VisibilityOff />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                )
+                            }}}
                     />
                     <Grid item xs={12} style={{ textAlign: 'center' }}>
                         <Button

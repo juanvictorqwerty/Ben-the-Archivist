@@ -5,6 +5,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import { Link as RouterLink,useNavigate } from 'react-router-dom';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import API_URL from "../context/apiConfig";
 
 function LoginPage(){
     const navigate = useNavigate();
@@ -15,7 +16,7 @@ function LoginPage(){
     const handleSubmit = async (event: { preventDefault: () => void }) => {
         event.preventDefault();
         try {
-            const response = await fetch('http://127.0.0.1:8000/login/', {
+            const response = await fetch(`${API_URL}/login/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
