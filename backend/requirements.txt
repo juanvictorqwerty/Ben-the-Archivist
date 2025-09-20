@@ -11,6 +11,7 @@ django-rest-passwordreset==1.5.0
 djangorestframework==3.16.1
 docstring_parser==0.16
 gunicorn==23.0.0
+python=3.12
 hf-xet==1.1.0
 hf_transfer==0.1.9
 msgspec==0.19.0
@@ -34,8 +35,6 @@ typeguard==4.4.2
 typing_extensions==4.13.2
 tyro==0.9.19
 tzdata==2025.2
-unsloth==2025.4.7
-unsloth_zoo==2025.4.4
 wheel==0.45.1
 xformers==0.0.30
 xxhash==3.5.0
