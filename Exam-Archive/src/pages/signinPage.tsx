@@ -1,4 +1,4 @@
-import { Container,Paper,TextField,Button,Grid,Link, Typography, Box } from "@mui/material"
+import { Container,Paper,TextField,Button,Link, Typography, Box } from "@mui/material"
 import { useState } from 'react';
 import axios from 'axios';
 import IconButton from '@mui/material/IconButton';
@@ -129,7 +129,7 @@ function SignInPage(){
                     )
                 }}}
             />
-            <Grid item xs={12} style={{ textAlign: 'center' }}>
+            
                 <Button
                     type="submit"
                     variant="contained"
@@ -137,7 +137,7 @@ function SignInPage(){
                 >
                     Enter
                 </Button>
-            </Grid>
+            
             <div>Have an account ?</div>
             <Box>
                 <Link component={RouterLink} to='/login' variant="body2">{'Login'}</Link>

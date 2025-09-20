@@ -1,4 +1,4 @@
-import { Container,Paper,TextField,Button,Grid,Link, Typography, Box } from "@mui/material"
+import { Container,Paper,TextField,Button,Link, Typography, Box } from "@mui/material"
 import { useState } from 'react';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -83,7 +83,7 @@ function LoginPage(){
                     }}}
                     
             />
-            <Grid item xs={12} style={{ textAlign: 'center' }}>
+            
                 <Button
                     type="submit"
                     variant="contained"
@@ -91,7 +91,7 @@ function LoginPage(){
                 >
                     Enter
                 </Button>
-            </Grid>
+            
             <Box>
                     <Link component={RouterLink} to='/emailRecovery' variant="body2">
                         Forgot your password ?

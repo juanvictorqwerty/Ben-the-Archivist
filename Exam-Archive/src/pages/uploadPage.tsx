@@ -277,7 +277,7 @@ function Upload(): JSX.Element {
 
                                 {/* Form Fields */}
                                 <Grid container spacing={3}>
-                                    <Grid xs={12} md={6}>
+                                    
                                         <TextField
                                             fullWidth
                                             label="Document Title"
@@ -288,9 +288,9 @@ function Upload(): JSX.Element {
                                             required
                                             variant="outlined"
                                         />
-                                    </Grid>
                                     
-                                    <Grid xs={12} md={6}>
+                                    
+                                    
                                         <TextField
                                             fullWidth
                                             label="Teacher/Professor"
@@ -301,9 +301,9 @@ function Upload(): JSX.Element {
                                             required
                                             variant="outlined"
                                         />
-                                    </Grid>
                                     
-                                    <Grid xs={12} md={6}>
+                                    
+                                    
                                         <TextField
                                             select
                                             fullWidth
@@ -318,9 +318,9 @@ function Upload(): JSX.Element {
                                             <MenuItem value="Spring">Spring</MenuItem>
                                             <MenuItem value="Summer">Summer</MenuItem>
                                         </TextField>
-                                    </Grid>
                                     
-                                    <Grid xs={12} md={6}>
+                                    
+                                    
                                         <TextField
                                             fullWidth
                                             type="number"
@@ -334,7 +334,7 @@ function Upload(): JSX.Element {
                                             variant="outlined"
                                         />
                                     </Grid>
-                                </Grid>
+                                
 
                                 {/* Status Messages */}
                                 {uploadStatus === 'success' && (

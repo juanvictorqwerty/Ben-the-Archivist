@@ -1,5 +1,5 @@
 import React, { useState, useEffect, type JSX } from 'react';
-import { TextField, Button, Grid, Typography, Box, Container, Paper, Alert } from "@mui/material";
+import { TextField, Button, Typography, Box, Container, Paper, Alert } from "@mui/material";
 import axios, { AxiosError, type AxiosRequestConfig } from 'axios';
 import IconButton from '@mui/material/IconButton';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -186,7 +186,7 @@ function ResetPasswordPage(): JSX.Element {
                         }}
                         inputProps={{ minLength: 8 }}
                     />
-                    <Grid item xs={12} style={{ textAlign: 'center' }}>
+                    
                         <Button
                             type="submit"
                             variant="contained"
@@ -195,7 +195,7 @@ function ResetPasswordPage(): JSX.Element {
                         >
                             {loading ? 'Resetting...' : 'Reset Password'}
                         </Button>
-                    </Grid>
+                    
                 </Box>
             </Paper>
         </Container>
