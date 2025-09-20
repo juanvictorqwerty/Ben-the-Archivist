@@ -30,11 +30,6 @@ setuptools==78.1.1
 shtab==1.7.2
 sqlparse==0.5.3
 sympy==1.14.0
-tokenizers==0.21.1
-torch==2.7.0
-torchvision==0.22.0
-transformers==4.51.3
-triton-windows==3.3.0.post19
 trl==0.15.2
 typeguard==4.4.2
 typing_extensions==4.13.2
