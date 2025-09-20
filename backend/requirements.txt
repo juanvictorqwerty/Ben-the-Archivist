@@ -10,12 +10,14 @@ django-rest-knox==5.0.2
 django-rest-passwordreset==1.5.0
 djangorestframework==3.16.1
 docstring_parser==0.16
+gunicorn==23.0.0
 hf-xet==1.1.0
 hf_transfer==0.1.9
 huggingface-hub==0.30.2
 msgspec==0.19.0
 multiprocess==0.70.16
 mysqlclient==2.2.7
+packaging==25.0
 pdfminer.six==20250327
 pdfplumber==0.11.6
 peft==0.15.2
